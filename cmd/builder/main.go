@@ -28,61 +28,60 @@ func main() {
 }
 
 func build(c *cli.Context) error {
-
 	var vars []builder.Variable
 
-	/*
-		Single type variables
-	*/
+	vars = append(vars, parseSingleVars(c)...)
+	vars = append(vars, parseListVars(c)...)
+
+	className := c.String("class")
+	return builder.Generate(os.Stdout, className, vars)
+}
+
+func parseSingleVars(c *cli.Context) []builder.Variable {
+	var vars []builder.Variable
+
 	for _, val := range c.StringSlice("string") {
 		vars = append(vars, builder.Var(builder.String, val))
 	}
-
 	for _, val := range c.StringSlice("int") {
 		vars = append(vars, builder.Var(builder.Int, val))
 	}
-
 	for _, val := range c.StringSlice("integer") {
 		vars = append(vars, builder.Var(builder.Integer, val))
 	}
-
 	for _, val := range c.StringSlice("boolean") {
 		vars = append(vars, builder.Var(builder.Bool, val))
 	}
-
 	for _, val := range c.StringSlice("Boolean") {
 		vars = append(vars, builder.Var(builder.Bool, val))
 	}
-
 	for _, val := range c.StringSlice("custom") {
 		t := builder.Custom(strings.Title(val))
 		v := strings.ToLower(val)
 		vars = append(vars, builder.Var(t, v))
 	}
 
-	/*
-		List and array variable types
-	*/
+	return vars
+}
+
+func parseListVars(c *cli.Context) []builder.Variable {
+	var vars []builder.Variable
+
 	for _, val := range c.StringSlice("string-list") {
 		vars = append(vars, builder.List(builder.String, val))
 	}
-
 	for _, val := range c.StringSlice("integer-list") {
 		vars = append(vars, builder.List(builder.Integer, val))
 	}
-
 	for _, val := range c.StringSlice("int-array") {
 		vars = append(vars, builder.Array(builder.Int, val))
 	}
-
 	for _, val := range c.StringSlice("boolean-array") {
 		vars = append(vars, builder.Array(builder.Bool, val))
 	}
-
 	for _, val := range c.StringSlice("Boolean-list") {
 		vars = append(vars, builder.List(builder.Boolean, val))
 	}
-
 	for _, val := range c.StringSlice("custom-list") {
 		t := builder.Custom(strings.Title(val))
 		v := strings.ToLower(val)
@@ -92,16 +91,13 @@ func build(c *cli.Context) error {
 		vars = append(vars, builder.List(t, v))
 	}
 
-	className := c.String("class")
-	builder.Generate(os.Stdout, className, vars)
-	return nil
+	return vars
 }
 
 func requireFlags(f cli.ActionFunc) cli.ActionFunc {
 	return func(c *cli.Context) error {
 		if c.NumFlags() == 0 {
-			cli.ShowAppHelp(c)
-			return nil
+			return cli.ShowAppHelp(c)
 		}
 
 		return f(c)

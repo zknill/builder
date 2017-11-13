@@ -31,18 +31,20 @@ type variable struct {
 	Name string
 }
 
-func Generate(w io.Writer, className string, vars []Variable) {
+// Generate generates the builder class code from class name
+// and variables. It writes the output to w.
+func Generate(w io.Writer, className string, vars []Variable) error {
 	tmpl := template.Must(template.New("builder").Parse(templateContent))
 
 	var vv []variable
 	for _, v := range vars {
 		vv = append(vv, variable{
-			Type: v.Type(),
+			Type: template.HTML(v.Type()),
 			Name: v.Name(),
 		})
 	}
 
-	tmpl.Execute(w, class{
+	return tmpl.Execute(w, class{
 		ClassName: className,
 		Variables: vv,
 	})
