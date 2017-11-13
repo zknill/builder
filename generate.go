@@ -6,6 +6,10 @@ import (
 )
 
 const templateContent = `
+{{if .Constructor}}public {{.ClassName}}(final Builder builder) { {{range .Variables}}
+    this.{{.Name}} = builder.{{.Name}};{{end}}
+}
+{{end}}
 public static class Builder {
 {{range .Variables}}
     private {{.Type}} {{.Name}};{{end}}
@@ -22,8 +26,9 @@ public static class Builder {
 `
 
 type class struct {
-	Variables []variable
-	ClassName string
+	Constructor bool
+	Variables   []variable
+	ClassName   string
 }
 
 type variable struct {
@@ -33,7 +38,7 @@ type variable struct {
 
 // Generate generates the builder class code from class name
 // and variables. It writes the output to w.
-func Generate(w io.Writer, className string, vars []Variable) error {
+func Generate(w io.Writer, className string, vars []Variable, constructor bool) error {
 	tmpl := template.Must(template.New("builder").Parse(templateContent))
 
 	var vv []variable
@@ -45,7 +50,8 @@ func Generate(w io.Writer, className string, vars []Variable) error {
 	}
 
 	return tmpl.Execute(w, class{
-		ClassName: className,
-		Variables: vv,
+		Constructor: constructor,
+		ClassName:   className,
+		Variables:   vv,
 	})
 }

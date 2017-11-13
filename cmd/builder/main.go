@@ -34,7 +34,8 @@ func build(c *cli.Context) error {
 	vars = append(vars, parseListVars(c)...)
 
 	className := c.String("class")
-	return builder.Generate(os.Stdout, className, vars)
+	withConstructor := c.Bool("constructor")
+	return builder.Generate(os.Stdout, className, vars, withConstructor)
 }
 
 func parseSingleVars(c *cli.Context) []builder.Variable {
@@ -168,5 +169,10 @@ var flags = []cli.Flag{
 		Aliases: []string{"c"},
 		Usage:   "class to generate builder for",
 		Value:   "CLAZZ",
+	},
+	&cli.BoolFlag{
+		Name:  "constructor",
+		Usage: "include the parent classes constructor",
+		Value: false,
 	},
 }
