@@ -92,5 +92,5 @@ type arrayVariable struct {
 // composes a variable adding list to the inner
 // variables type definition.
 func (l arrayVariable) Type() string {
-	return fmt.Sprintf("[]%s", l.Variable.Type())
+	return fmt.Sprintf("%s[]", l.Variable.Type())
 }
