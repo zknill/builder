@@ -3,13 +3,15 @@
 
 [[projects]]
   branch = "v2"
+  digest = "1:eaef15d38dc2b0f15ecce8d3aff44bd0301ce7e6574e935446e6a7d629546669"
   name = "gopkg.in/urfave/cli.v2"
   packages = ["."]
-  revision = "b2bf3c5abeb90da407891aecd1df2c5a1f6170c1"
+  pruneopts = ""
+  revision = "d3ae77c26ac8db90639677e4831a728d33c36111"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "951114246b91adb0ec0e66b23048b914b0f12cdeb03946e1b326d9de0bc9bb0f"
+  input-imports = ["gopkg.in/urfave/cli.v2"]
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -9,6 +9,8 @@ const (
 	String  coreType = "String"
 	Integer coreType = "Integer"
 	Int     coreType = "int"
+	Long	coreType = "long"
+	LongObj	coreType = "Long"
 	Bool    coreType = "boolean"
 	Boolean coreType = "Boolean"
 )

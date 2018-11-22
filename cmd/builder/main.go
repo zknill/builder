@@ -56,6 +56,12 @@ func parseSingleVars(c *cli.Context) []builder.Variable {
 	for _, val := range c.StringSlice("Boolean") {
 		vars = append(vars, builder.Var(builder.Bool, val))
 	}
+	for _, val := range c.StringSlice("long") {
+		vars = append(vars, builder.Var(builder.Long, val))
+	}
+	for _, val := range c.StringSlice("Long") {
+		vars = append(vars, builder.Var(builder.LongObj, val))
+	}
 	for _, val := range c.StringSlice("custom") {
 		t := builder.Custom(strings.Title(val))
 		v := strings.ToLower(val)
@@ -120,6 +126,16 @@ var flags = []cli.Flag{
 		Name:    "integer",
 		Aliases: []string{"I"},
 		Usage:   "Integer variable by `name`",
+	},
+	&cli.StringSliceFlag{
+		Name:    "long",
+		Aliases: []string{"l"},
+		Usage:   "long variable by `name`",
+	},
+	&cli.StringSliceFlag{
+		Name:    "Long",
+		Aliases: []string{"L"},
+		Usage:   "Long variable by `name`",
 	},
 	&cli.StringSliceFlag{
 		Name:    "boolean",
